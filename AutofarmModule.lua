@@ -43,7 +43,7 @@ function Module:Noclip()
 
 local Character = Module:GetCharacter()
 coroutine.wrap(function()
-    Services.RunService:RenderStepped:Connect(function()
+    Services.RunService.RenderStepped:Connect(function()
         for _,v in pairs(Character:GetChildren()) do
             if v.ClassName == "BasePart" then
                 v.CanCollide = false
@@ -58,7 +58,7 @@ function Module:SetVelocity()
 local Character,HumanoidRootPart = Module:GetCharacter()
 
 coroutine.wrap(function()
-    Services.RunService:RenderStepped:Connect(function()
+    Services.RunService.RenderStepped:Connect(function()
         HumanoidRootPart.Velocity = Vector3.new(0,0,0)
     end)
 end)()
