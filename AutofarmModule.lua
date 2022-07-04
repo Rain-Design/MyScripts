@@ -34,7 +34,7 @@ function Module:Tween(Pos,Speed)
 local Character,HumanoidRootPart = Module:GetCharacter()
 
 local Distance = Module:GetDistance(Pos)
-local MyTween = Services.TweenService:Create(HumanoidRootPart,TweenInfo.new(Distance / Speed),{CFrame = Pos})
+local MyTween = Services.TweenService:Create(HumanoidRootPart,TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),{CFrame = Pos})
 
 return MyTween, Distance
 end
