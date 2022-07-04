@@ -1,35 +1,39 @@
 local Module = {}
 
 function Module:GetCharacter()
-local HumanoidRootPart = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+local Character = game.Players.LocalPlayer.Character
+local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
     
-    if not HumanoidRootPart then
+    if not Character and HumanoidRootPart then
         return
     end
 
-    return HumanoidRootPart
+    return Character, HumanoidRootPart
+end
+
+function Module:CharacterCheck()
+
+local Character,HumanoidRootPart = Module:GetCharacter()
+
+if Character and HumanoidRootPart then
+    return true
+end
+
+return false
 end
 
 function Module:GetDistance(Pos)
-local Character = Module:GetCharacter()
+local Character,HumanoidRootPart = Module:GetCharacter()
 
-if not Character then
-    return
-end
-
-return (Character.Position - Pos.p).Magnitude
+return (HumanoidRootPart.Position - Pos.p).Magnitude
 end
 
 function Module:Tween(Pos,Speed)
 
-local Character = Module:GetCharacter()
-
-if not Character then
-    return
-end
+local Character,HumanoidRootPart = Module:GetCharacter()
 
 local Distance = Module:GetDistance(Pos)
-local MyTween = game:GetService("TweenService"):Create(Character,TweenInfo.new(Distance / Speed),{CFrame = Pos})
+local MyTween = game:GetService("TweenService"):Create(HumanoidRootPart,TweenInfo.new(Distance / Speed),{CFrame = Pos})
 
 return MyTween, Distance
 end
