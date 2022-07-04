@@ -1,6 +1,6 @@
 local Module = {}
 
-function Module:CharacterCheck()
+function Module:Check()
 
 local Character = game.Players.LocalPlayer.Character
 
