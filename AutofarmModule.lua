@@ -53,7 +53,7 @@ coroutine.wrap(function()
 end)()
 end
 
-function SetVelocity()
+function Module:SetVelocity()
 
 local Character,HumanoidRootPart = Module:GetCharacter()
 
