@@ -1,25 +1,22 @@
 local Module = {}
 
-function Module:GetCharacter()
-local Character = game.Players.LocalPlayer.Character
-local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
-    
-    if not Character and HumanoidRootPart then
-        return
-    end
-
-    return Character, HumanoidRootPart
-end
-
 function Module:CharacterCheck()
 
-local Character,HumanoidRootPart = Module:GetCharacter()
+local Character = game.Players.LocalPlayer.Character
 
-if Character and HumanoidRootPart then
+if Character and Character:FindFirstChild("HumanoidRootPart") and Character:FindFirstChild("Humanoid") and Character.Humanoid.Health > 0 then
     return true
 end
 
 return false
+end
+
+function Module:GetCharacter()
+
+local Character = game.Players.LocalPlayer.Character
+local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+    
+return Character, HumanoidRootPart
 end
 
 function Module:GetDistance(Pos)
