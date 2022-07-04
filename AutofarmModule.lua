@@ -1,9 +1,7 @@
 local Module = {}
 
-local Services = {
-    TweenService = game:GetService("TweenService"),
-    RunService = game:GetService("RunService")
-}
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 
 function Module:Check()
 
@@ -34,7 +32,7 @@ function Module:Tween(Pos,Speed)
 local Character,HumanoidRootPart = Module:GetCharacter()
 
 local Distance = Module:GetDistance(Pos)
-local MyTween = Services.TweenService:Create(HumanoidRootPart,TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),{CFrame = Pos})
+local MyTween = TweenService:Create(HumanoidRootPart,TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),{CFrame = Pos})
 
 return MyTween, Distance
 end
@@ -43,9 +41,9 @@ function Module:Noclip()
 
 local Character = Module:GetCharacter()
 coroutine.wrap(function()
-    Services.RunService.RenderStepped:Connect(function()
+    RunService.RenderStepped:Connect(function()
         for _,v in pairs(Character:GetChildren()) do
-            if v.ClassName == "BasePart" then
+            if v.ClassName == "Part" or v.ClassName == "MeshPart" then
                 v.CanCollide = false
             end
         end
@@ -58,7 +56,7 @@ function Module:SetVelocity()
 local Character,HumanoidRootPart = Module:GetCharacter()
 
 coroutine.wrap(function()
-    Services.RunService.RenderStepped:Connect(function()
+    RunService.RenderStepped:Connect(function()
         HumanoidRootPart.Velocity = Vector3.new(0,0,0)
     end)
 end)()
