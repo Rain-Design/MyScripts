@@ -10,14 +10,14 @@ local HumanoidRootPart = game.Players.LocalPlayer.Character and game.Players.Loc
     return HumanoidRootPart
 end
 
-function Module:GetDistance(Part)
+function Module:GetDistance(Pos)
 local Character = Module:GetCharacter()
 
 if not Character then
     return
 end
 
-return (Character.Position - Part.Position).Magnitude
+return (Character.Position - Pos.p).Magnitude
 end
 
 function Module:Tween(Pos,Speed)
@@ -28,7 +28,7 @@ if not Character then
     return
 end
 
-local Distance = (Character.Position - Pos.p).Magnitude
+local Distance = Module:GetDistance(Pos)
 local MyTween = game:GetService("TweenService"):Create(Character,TweenInfo.new(Distance / Speed),{CFrame = Pos})
 
 return MyTween, Distance
