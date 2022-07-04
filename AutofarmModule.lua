@@ -33,3 +33,5 @@ local MyTween = game:GetService("TweenService"):Create(Character,TweenInfo.new(D
 
 return MyTween, Distance
 end
+
+return Module
