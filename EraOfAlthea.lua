@@ -98,7 +98,7 @@ while true do
                 GetQuest()
                 end
                 while Mob.Health.Value > 0 and Player.Character.Humanoid.Health > 0 do
-                    Player.Character.HumanoidRootPart.CFrame = Mob.HumanoidRootPart.CFrame
+                    Player.Character.HumanoidRootPart.CFrame = Mob.HumanoidRootPart.CFrame * CFrame.new(0,-2,0)
                     LightAttack:FireServer("SecretCode")
                 wait()
                 end
