@@ -1,0 +1,78 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/Libraries/main/Revenant.lua", true))()
+local Flags = Library.Flags
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local GemAmount = game:GetService("Players").LocalPlayer["_stats"]["gem_amount"]
+
+local Codes = {"GHOUL", "subtomaokuma", "SubToKelvingts", "SubToBlamspot", "KingLuffy", "TOADBOIGAMING", "noclypso", "FictioNTheFirst"}
+
+local Window = Library:Window({
+    Text = "Auto-Summon"
+})
+
+local Misc = Library:Window({
+    Text = "Misc"
+})
+
+Window:Toggle({
+    Text = "Use Tickets",
+    Flag = "Tickets"
+})
+
+Window:Toggle({
+    Text = "Use Gems",
+    Flag = "Gems"
+})
+
+Misc:Button({
+    Text = "Redeem Codes",
+    Callback = function()
+        for _,v in pairs(Codes) do
+            game:GetService("ReplicatedStorage").endpoints.client_to_server.redeem_code:InvokeServer(v)
+        end
+    end
+})
+
+while true do
+    if Flags.Tickets then
+        if Player.PlayerGui.items.grid.List.Outer.ItemFrames:FindFirstChild("summon_ticket") then
+            Library:Notification({
+                Text = "Spinning with tickets.",
+                Duration = 10
+            })
+            while true do
+            if not Player.PlayerGui.items.grid.List.Outer.ItemFrames:FindFirstChild("summon_ticket") or not Flags.Tickets then
+                Library:Notification({
+                    Text = Flags.Tickets and "You ran out of tickets." or "Disabled.",
+                    Duration = 10
+                })
+                break
+            end
+            game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_random_fighter:InvokeServer("dbz_fighter", "ticket")
+            wait()
+            end
+        end
+    end
+    if Flags.Gems then
+        if GemAmount.Value >= 50 then
+            Library:Notification({
+                Text = "Spinning with gems.",
+                Duration = 10
+            })
+            while true do
+            if GemAmount.Value < 50 or not Flags.Gems then
+                Library:Notification({
+                    Text = Flags.Gems and "You ran out of Gems." or "Disabled.",
+                    Duration = 10
+                })
+                break
+            end
+            game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_random_fighter:InvokeServer("dbz_fighter", "gems")
+            wait()
+            end
+        end
+    end
+    wait()
+end
