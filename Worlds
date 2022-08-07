@@ -1,0 +1,44 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/Libraries/main/Revenant.lua", true))()
+local Flags = Library.Flags
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local Window = Library:Window({
+    Text = "Farming"
+})
+
+Window:Toggle({
+    Text = "Auto-Upgrade",
+    Flag = "Upgrade"
+})
+
+local Resource = Player["_stats"].resource
+
+local Units = game:GetService("Workspace")["_UNITS"]
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Loader = require(ReplicatedStorage.src.Loader)
+local GUIService = Loader.load_client_service(ReplicatedStorage.src.client.Services.UpgradeServiceClient, "GUIService")
+
+local Price
+while true do
+if Flags.Upgrade then
+for _,v in next, Units:GetChildren() do
+    if v:FindFirstChild("_stats") and v._stats.player.Value == Player then
+        GUIService.unit_upgrade_ui:show(v, v._stats.uuid.Value)
+        wait(.3)
+        Price = string.gsub(Player.PlayerGui.UnitUpgrade.Primary.Container.Main.Main.Buttons.Upgrade.Main["Text"].Text, "%D", "")
+        if Resource.Value > tonumber(Price) then
+            game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
+            Library:Notification({
+                Text = "Spent: "..tostring(Price).." upgrading "..tostring(v),
+                Duration = 10
+            })
+            print(tonumber(Price))
+        end
+    end
+end
+end
+wait()
+end
