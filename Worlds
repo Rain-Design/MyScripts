@@ -32,7 +32,7 @@ for _,v in next, Units:GetChildren() do
         if Resource.Value > tonumber(Price) then
             game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
             Library:Notification({
-                Text = "Spent: "..tostring(Price).." upgrading "..tostring(v),
+                Text = "Spent "..tostring(Price).."¥ ".." upgrading: "..tostring(v).."[".._.."]",
                 Duration = 10
             })
             print(tonumber(Price))
