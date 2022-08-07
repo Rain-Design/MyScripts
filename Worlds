@@ -25,6 +25,7 @@ local Price
 while true do
 if Flags.Upgrade then
 for _,v in next, Units:GetChildren() do
+    if not Flags.Upgrade then break end
     if v:FindFirstChild("_stats") and v._stats.player.Value == Player then
         GUIService.unit_upgrade_ui:show(v, v._stats.uuid.Value)
         wait(.1)
