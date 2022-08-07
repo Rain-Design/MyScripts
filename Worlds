@@ -27,13 +27,13 @@ if Flags.Upgrade then
 for _,v in next, Units:GetChildren() do
     if v:FindFirstChild("_stats") and v._stats.player.Value == Player then
         GUIService.unit_upgrade_ui:show(v, v._stats.uuid.Value)
-        wait(.3)
+        wait(.1)
         Price = string.gsub(Player.PlayerGui.UnitUpgrade.Primary.Container.Main.Main.Buttons.Upgrade.Main["Text"].Text, "%D", "")
         if Resource.Value > tonumber(Price) then
             game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
             local FirstUpper = string.gsub(tostring(v),"^%l", string.upper)
             Library:Notification({
-                Text = "-"..tostring(Price).."¥ ".."| ".."[".._.."] "..FirstUpper.." - ".."Upgrade: "..v._stats.upgrade.Value,
+                Text = "-"..tostring(Price).."¥ ".."| ".."[".._.."]"..FirstUpper.." - ".."Upgrade: "..v._stats.upgrade.Value,
                 Duration = 10
             })
             print(tonumber(Price))
