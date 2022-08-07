@@ -33,7 +33,7 @@ for _,v in next, Units:GetChildren() do
             game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
             local FirstUpper = string.gsub(tostring(v),"^%l", string.upper)
             Library:Notification({
-                Text = "Spent "..tostring(Price).."¥ ".."Upgrading: "..FirstUpper.."[".._.."]",
+                Text = "-"..tostring(Price).."¥ ".."Upgraded: "..FirstUpper.." - "..v._stats.upgrade.Value,
                 Duration = 10
             })
             print(tonumber(Price))
