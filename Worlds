@@ -26,7 +26,7 @@ while true do
 if Flags.Upgrade then
 for _,v in next, Units:GetChildren() do
     if not Flags.Upgrade then break end
-    if v:FindFirstChild("_stats") and v._stats.player.Value == Player then
+    if not v.Name == "blackbeard" and v:FindFirstChild("_stats") and v._stats.player.Value == Player then
         GUIService.unit_upgrade_ui:show(v, v._stats.uuid.Value)
         wait(.1)
         Price = string.gsub(Player.PlayerGui.UnitUpgrade.Primary.Container.Main.Main.Buttons.Upgrade.Main["Text"].Text, "%D", "")
