@@ -28,8 +28,8 @@ for _,v in next, Units:GetChildren() do
     if not Flags.Upgrade then break end
     if v:FindFirstChild("_stats") and v._stats.player.Value == Player then
         GUIService.unit_upgrade_ui:show(v, v._stats.uuid.Value)
-        wait(.1)
-        if not Player.PlayerGui.UnitUpgrade.Primary.Container.Main.Main.Buttons.Upgrade.Main["Text"].Text == "Max" then
+        wait(.2)
+        if Player.PlayerGui.UnitUpgrade.Primary.Container.Main.Main.Buttons.Upgrade.Main["Text"].Text ~= "Max" then
         Price = string.gsub(Player.PlayerGui.UnitUpgrade.Primary.Container.Main.Main.Buttons.Upgrade.Main["Text"].Text, "%D", "")
         if Resource.Value > tonumber(Price) then
             game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
