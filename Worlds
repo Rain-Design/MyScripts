@@ -29,6 +29,7 @@ Window:Toggle({
     Flag = "Upgrade"
 })
 
+local Connection
 Window:Toggle({
     Text = "Sell At 50",
     Callback = function(bool)
@@ -36,9 +37,9 @@ Window:Toggle({
     if bool and Wave.Value >= 50 then
         SellAll()
     end
-    local Connection = Wave:GetPropertyChangedSignal("Value"):Connect(function()
+    Connection = Wave:GetPropertyChangedSignal("Value"):Connect(function()
     if Wave.Value >= 50 then
-        SellAll()  
+        SellAll()
     end
     end)
     end
