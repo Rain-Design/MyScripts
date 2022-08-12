@@ -4,6 +4,22 @@ local Flags = Library.Flags
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Loader = require(ReplicatedStorage.src.Loader)
+local GUIService = Loader.load_client_service(ReplicatedStorage.src.client.Services.UpgradeServiceClient, "GUIService")
+
+local Resource = Player["_stats"].resource
+local Wave = game:GetService("Workspace")["_wave_num"]
+local Units = game:GetService("Workspace")["_UNITS"]
+
+local function SellAll()
+    for _,v in pairs(Units:GetChildren()) do
+        if v:FindFirstChild("_stats") and v._stats.player.value == game.Players.LocalPlayer then
+            game:GetService("ReplicatedStorage").endpoints.client_to_server.sell_unit_ingame:InvokeServer(v)
+        end
+    end
+end
+
 local Window = Library:Window({
     Text = "Farming"
 })
@@ -13,13 +29,20 @@ Window:Toggle({
     Flag = "Upgrade"
 })
 
-local Resource = Player["_stats"].resource
-
-local Units = game:GetService("Workspace")["_UNITS"]
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Loader = require(ReplicatedStorage.src.Loader)
-local GUIService = Loader.load_client_service(ReplicatedStorage.src.client.Services.UpgradeServiceClient, "GUIService")
+Window:Toggle({
+    Text = "Sell At 50",
+    Callback = function(bool)
+    if Connection then Connection:Disconnect() end
+    if bool and Wave.Value >= 50 then
+        SellAll()
+    end
+    local Connection = Wave:GetPropertyChangedSignal("Value"):Connect(function()
+    if Wave.Value >= 50 then
+        SellAll()  
+    end
+    end)
+    end
+})
 
 local Price
 while true do
