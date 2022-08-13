@@ -6,7 +6,6 @@ local Player = Players.LocalPlayer
 
 local GemAmount = game:GetService("Players").LocalPlayer["_stats"]["gem_amount"]
 
-local Items = game:GetService("Workspace")["travelling_merchant"].stand.items
 local IsOpen = game:GetService("Workspace")["travelling_merchant"]["is_open"]
 
 local Codes = {"GHOUL", "subtomaokuma", "SubToKelvingts", "SubToBlamspot", "KingLuffy", "TOADBOIGAMING", "noclypso", "FictioNTheFirst"}
@@ -41,7 +40,7 @@ Misc:Button({
 task.spawn(function()
     while true do
         if IsOpen.Value then
-        for _,v in pairs(Items:GetChildren()) do
+        for _,v in pairs(game:GetService("Workspace")["travelling_merchant"].stand.items:GetChildren()) do
             if v.Name:find("summon") then
                 game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_travelling_merchant_item:InvokeServer(tostring(v))
             end
