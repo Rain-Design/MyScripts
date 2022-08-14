@@ -1,4 +1,4 @@
-wait(5)
+wait(10)
 while true do
     if game:GetService("Players").LocalPlayer.PlayerGui.VoteStart.Enabled then
         wait(3)
