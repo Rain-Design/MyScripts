@@ -1,11 +1,15 @@
-wait(20)
+local Lobbies = workspace:WaitForChild("_LOBBIES")
+wait(5)
+while true do
 for _,v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) do
     if v.Owner.Value == nil then
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(tostring(v))
         wait(.5)
-        game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(tostring(v), "demonslayer_level_1", false, "Normal")
+        game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(tostring(v), "namek_infinite", false, "Normal")
         wait(.5)
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(tostring(v))
-        break
+        wait(15)
     end
+end
+wait()
 end
