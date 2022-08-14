@@ -3,7 +3,7 @@ for _,v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) d
     if v.Owner.Value == nil then
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(tostring(v))
         wait(.5)
-        game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(tostring(v), "demon_level_1", false, "Hard")
+        game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(tostring(v), "demon_level_1", false, "Normal")
         wait(1)
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(tostring(v))
         break
