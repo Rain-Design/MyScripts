@@ -6,6 +6,7 @@ task.spawn(function()
     while true do
         if game:GetService("Workspace")["_DATA"].GameFinished.Value then
             game:GetService("ReplicatedStorage").endpoints["client_to_server"]["teleport_back_to_lobby"]:InvokeServer()
+            break
         end
         task.wait()
     end
