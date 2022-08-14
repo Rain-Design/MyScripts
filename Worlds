@@ -1,4 +1,4 @@
-wait(15)
+wait(20)
 game:GetService("ReplicatedStorage").endpoints.client_to_server.vote_start:InvokeServer()
 loadstring(readfile("Macro/Macro1.txt"))()
 
