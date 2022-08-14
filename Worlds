@@ -1,4 +1,11 @@
-wait(20)
+wait(5)
+while true do
+    if game:GetService("Players").LocalPlayer.PlayerGui.VoteStart.Enabled then
+        wait(3)
+        break
+    end
+    task.wait()
+end
 game:GetService("ReplicatedStorage").endpoints.client_to_server.vote_start:InvokeServer()
 loadstring(readfile("Macro/Macro1.txt"))()
 
