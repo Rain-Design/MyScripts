@@ -5,7 +5,7 @@ for _,v in pairs(Lobbies.Story:GetChildren()) do
     if v.Owner.Value == nil then
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(tostring(v))
         wait(.5)
-        game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(tostring(v), "namek_infinite", false, "Normal")
+        game:GetService("ReplicatedStorage").endpoints.client_to_server.request_lock_level:InvokeServer(tostring(v), "namek_infinite", false, "Hard")
         wait(.5)
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(tostring(v))
         wait(15)
