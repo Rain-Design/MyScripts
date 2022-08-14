@@ -1,4 +1,4 @@
-wait(15)
+wait(20)
 for _,v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) do
     if v.Owner.Value == nil then
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(tostring(v))
