@@ -1,3 +1,28 @@
+local function FormatTime(seconds)
+	return string.format("%d:%.02d", seconds/60, seconds%60, seconds*1000%1000)
+end
+
+local Old = os.clock
+local Elapsed
+local function SendWebhook()
+local data = {
+		["embeds"] = {{
+			["color"] =  0x3af0a1,
+			["timestamp"] =  tostring(DateTime.now():ToIsoDate()),
+			["fields"] = {
+				{
+					["name"] = "Anime Adventures",
+					["value"] = "You have finished a game. Time taken: "..tostring(FormatTime(Elapsed)),
+					["inline"] = true
+				},
+				},
+		}}
+	}
+local finalData = game:GetService("HttpService"):JSONEncode(data)
+
+syn.request({Url = "https://discord.com/api/webhooks/808003756485509170/5zcjZ2GbCSoRCa7GGaF8KO8JwwxLc5uAZ4m_2XYoTeaQiJUSvX9a8Tm7ztiTTt79_uxL", Method = "POST", Headers = {["Content-Type"] = "application/json"  }, Body = finalData})
+end
+
 wait(10)
 while true do
     if game:GetService("Players").LocalPlayer.PlayerGui.VoteStart.Enabled then
@@ -18,6 +43,8 @@ task.spawn(function()
                 end
                 task.wait(5)
             end
+            Elapsed = os.clock() - Old
+            SendWebhook()
             game:GetService("ReplicatedStorage").endpoints["client_to_server"]["teleport_back_to_lobby"]:InvokeServer()
             break
         end
