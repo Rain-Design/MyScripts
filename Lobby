@@ -1,7 +1,7 @@
 local Lobbies = workspace:WaitForChild("_LOBBIES")
 wait(5)
 while true do
-for _,v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetChildren()) do
+for _,v in pairs(Lobbies.Story:GetChildren()) do
     if v.Owner.Value == nil then
         game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer(tostring(v))
         wait(.5)
