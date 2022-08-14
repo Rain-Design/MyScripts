@@ -5,6 +5,7 @@ loadstring(readfile("Macro/Macro1.txt"))()
 task.spawn(function()
     while true do
         if game:GetService("Workspace")["_DATA"].GameFinished.Value then
+            wait(15)
             game:GetService("ReplicatedStorage").endpoints["client_to_server"]["teleport_back_to_lobby"]:InvokeServer()
             break
         end
