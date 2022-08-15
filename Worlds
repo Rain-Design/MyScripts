@@ -23,7 +23,7 @@ local finalData = game:GetService("HttpService"):JSONEncode(data)
 syn.request({Url = "https://discord.com/api/webhooks/808003756485509170/5zcjZ2GbCSoRCa7GGaF8KO8JwwxLc5uAZ4m_2XYoTeaQiJUSvX9a8Tm7ztiTTt79_uxL", Method = "POST", Headers = {["Content-Type"] = "application/json"  }, Body = finalData})
 end
 
-wait(10)
+wait(15)
 while true do
     if game:GetService("Players").LocalPlayer.PlayerGui.VoteStart.Enabled then
         wait(3)
