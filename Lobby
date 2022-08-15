@@ -1,5 +1,15 @@
 local Lobbies = workspace:WaitForChild("_LOBBIES")
-wait(5)
+wait(10)
+local GemAmount = game:GetService("Players").LocalPlayer["_stats"]["gem_amount"]
+
+while true do
+    if GemAmount.Value < 50 then
+        break
+    end
+    game:GetService("ReplicatedStorage").endpoints.client_to_server.buy_random_fighter:InvokeServer("dbz_fighter", "gems")
+    task.wait()
+end
+
 while true do
 for _,v in pairs(Lobbies.Story:GetChildren()) do
     if v.Owner.Value == nil then
