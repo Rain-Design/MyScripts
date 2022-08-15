@@ -12,7 +12,7 @@ local data = {
 			["fields"] = {
 				{
 					["name"] = "Anime Adventures",
-					["value"] = "You have finished a game. Time taken: "..tostring(FormatTime(Elapsed)),
+					["value"] = "You have finished a game. Time Elapsed: "..tostring(FormatTime(Elapsed)),
 					["inline"] = true
 				},
 				},
