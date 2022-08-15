@@ -2,7 +2,7 @@ local function FormatTime(seconds)
 	return string.format("%d:%.02d", seconds/60, seconds%60, seconds*1000%1000)
 end
 
-local Old = os.clock
+local Old = os.clock()
 local Elapsed
 local function SendWebhook()
 local data = {
