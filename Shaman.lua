@@ -509,7 +509,7 @@ toggleUICorner.Parent = toggleFrame
 local checkIcon = Instance.new("ImageLabel")
 checkIcon.Name = "CheckIcon"
 checkIcon.Image = "rbxassetid://10665993198"
-checkIcon.ImageColor3 = Color3.fromRGB(217, 217, 217)
+checkIcon.ImageColor3 = Color3.fromRGB(165, 255, 210)
 checkIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 checkIcon.BackgroundTransparency = 1
 checkIcon.Size = UDim2.new(0, 15, 0, 15)
@@ -520,6 +520,7 @@ toggleButton.MouseButton1Click:Connect(function()
     Toggled = not Toggled
     library.Flags[Info.Flag] = Toggled
     
+    toggleText.TextColor3 = Toggled and Color3.fromRGB(165, 255, 210) or Color3.fromRGB(217, 217, 217)
     checkIcon.Visible = Toggled and true or false
     pcall(Info.Callback, Toggled)
 end)
