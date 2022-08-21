@@ -482,6 +482,8 @@ end)
 function sectiontable:Button(Info)
 Info.Text = Info.Text or "Button"
 Info.Callback = Info.Callback or function() end
+
+local buttontable = {}
     
 local button = Instance.new("Frame")
 button.Name = "Button"
