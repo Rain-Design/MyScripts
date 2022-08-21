@@ -508,7 +508,7 @@ toggleUICorner.Parent = toggleFrame
 
 local checkIcon = Instance.new("ImageLabel")
 checkIcon.Name = "CheckIcon"
-checkIcon.Image = "rbxassetid://10665913527"
+checkIcon.Image = "rbxassetid://10665993198"
 checkIcon.ImageColor3 = Color3.fromRGB(217, 217, 217)
 checkIcon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 checkIcon.BackgroundTransparency = 1
