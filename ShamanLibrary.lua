@@ -378,7 +378,7 @@ function tab:Section(Info)
 Info.Text = Info.Text or "Section"
 Info.Side = Info.Side or "Left"
 
-local SizeY = 27
+local SizeY = 23
 
 local sectiontable = {}
 
@@ -407,7 +407,7 @@ sectionFrame.Parent = section
 
 sectionFrame.ChildAdded:Connect(function(v)
     if v.ClassName == "Frame" then
-        SizeY = SizeY + 23
+        SizeY = SizeY + 27
     end
 end)
 
