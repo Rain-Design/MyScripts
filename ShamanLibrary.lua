@@ -135,6 +135,10 @@ closeButton.Size = UDim2.new(0, 17, 0, 17)
 closeButton.ZIndex = 2
 closeButton.Parent = topbar
 
+closeButton.MouseButton1Click:Once(function()
+    screenGui:Destroy()
+end)
+
 closeButton.MouseEnter:Connect(function()
     TweenService:Create(closeButton, TweenInfo.new(.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {ImageColor3 = Color3.fromRGB(217, 97, 99)}):Play()
 end)
@@ -154,12 +158,29 @@ minimizeButton.Size = UDim2.new(0, 17, 0, 17)
 minimizeButton.ZIndex = 2
 minimizeButton.Parent = topbar
 
-minimizeButton.MouseEnter:Connect(function()
-    TweenService:Create(minimizeButton, TweenInfo.new(.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {ImageColor3 = Color3.fromRGB(155, 237, 151)}):Play()
-end)
+local Opened = true
 
-minimizeButton.MouseLeave:Connect(function()
-    TweenService:Create(minimizeButton, TweenInfo.new(.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {ImageColor3 = Color3.fromRGB(217, 217, 217)}):Play()
+minimizeButton.MouseButton1Click:Connect(function()
+    Opened = not Opened
+    
+    topbar.Frame.Visible = Opened
+    task.spawn(function()
+    if Opened then
+        wait(.1)
+    end
+    for _,v in pairs(main:GetChildren()) do
+        if v.Name == "TabContainer" then
+            v.Visible = Opened
+        end
+    end
+    for _,v in pairs(main:GetChildren()) do
+       if v.Name == "LeftContainer" or v.Name == "RightContainer" and v.Visible then
+           v.Size = Opened and UDim2.new(0, 168,0, 287) or UDim2.new(0, 168,0, 0)
+       end
+    end
+    end)
+    
+    TweenService:Create(main, TweenInfo.new(.2, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {Size = Opened and UDim2.new(0, 450,0, 321) or UDim2.new(0, 450,0, 30)}):Play()
 end)
 
 local tabContainer = Instance.new("Frame")
