@@ -4,6 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 
 if CoreGui:FindFirstChild("Shaman") then
     CoreGui.Shaman:Destroy()
+     CoreGui.Tooltips:Destroy()
 end
 
 local TabSelected = nil
@@ -17,9 +18,83 @@ Info.Text = Info.Text or "Shaman"
 
 local window = {}
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "Shaman"
-screenGui.Parent = CoreGui
+local shamanScreenGui = Instance.new("ScreenGui")
+shamanScreenGui.Name = "Shaman"
+shamanScreenGui.Parent = CoreGui
+
+local tooltipScreenGui = Instance.new("ScreenGui")
+tooltipScreenGui.Name = "Tooltips"
+tooltipScreenGui.Parent = CoreGui
+
+local function Tooltip(text)
+local tooltip = Instance.new("Frame")
+tooltip.Name = "Tooltip"
+tooltip.AnchorPoint = Vector2.new(0.5, 0)
+tooltip.BackgroundColor3 = Color3.fromRGB(79, 79, 79)
+tooltip.Visible = false
+tooltip.Position = UDim2.new(0.352, 0, 0.0741, 0)
+tooltip.Size = UDim2.new(0, 100, 0, 19)
+tooltip.ZIndex = 5
+tooltip.Parent = tooltipScreenGui
+
+local newuICorner = Instance.new("UICorner")
+newuICorner.Name = "UICorner"
+newuICorner.CornerRadius = UDim.new(0, 3)
+newuICorner.Parent = tooltip
+
+local newuIStroke = Instance.new("UIStroke")
+newuIStroke.Name = "UIStroke"
+newuIStroke.Color = Color3.fromRGB(98, 98, 98)
+newuIStroke.Parent = tooltip
+
+local tooltipText = Instance.new("TextLabel")
+tooltipText.Name = "TooltipText"
+tooltipText.Font = Enum.Font.GothamBold
+tooltipText.Text = text
+tooltipText.TextColor3 = Color3.fromRGB(217, 217, 217)
+tooltipText.TextSize = 11
+tooltipText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+tooltipText.BackgroundTransparency = 1
+tooltipText.Size = UDim2.new(0, 100, 0, 19)
+tooltipText.Parent = tooltip
+tooltipText.ZIndex = 6
+
+local TextBounds = tooltipText.TextBounds
+
+tooltip.Size = UDim2.new(0, TextBounds.X + 10, 0, 19)
+tooltipText.Size = UDim2.new(0, TextBounds.X + 10, 0, 19)
+
+return tooltip
+end
+
+local function AddTooltip(element, text)
+    local Tooltip = Tooltip(text)
+    local Hovered = false
+    
+    local function Update()
+    local MousePos = UserInputService:GetMouseLocation()
+    local Viewport = workspace.CurrentCamera.ViewportSize
+    
+    Tooltip.Position = UDim2.new(MousePos.X / Viewport.X, 0, MousePos.Y / Viewport.Y, 0) + UDim2.new(0,0,0,-43)
+    end
+
+    element.MouseEnter:Connect(function()
+        Hovered = true
+        wait(.5)
+        if Hovered then
+        Tooltip.Visible = true
+        end
+    end)
+    
+    element.MouseLeave:Connect(function()
+        Hovered = false
+        Tooltip.Visible = false
+    end)
+    
+    element.MouseMoved:Connect(function()
+        Update()
+    end)
+end
 
 local main = Instance.new("Frame")
 main.Name = "Main"
@@ -28,7 +103,7 @@ main.BorderSizePixel = 0
 main.ClipsDescendants = true
 main.Position = UDim2.new(0.361, 0, 0.308, 0)
 main.Size = UDim2.new(0, 450, 0, 321)
-main.Parent = screenGui
+main.Parent = shamanScreenGui
 
 local uICorner = Instance.new("UICorner")
 uICorner.Name = "UICorner"
@@ -136,7 +211,7 @@ closeButton.ZIndex = 2
 closeButton.Parent = topbar
 
 closeButton.MouseButton1Click:Once(function()
-    screenGui:Destroy()
+    shamanScreenGui:Destroy()
 end)
 
 closeButton.MouseEnter:Connect(function()
@@ -482,6 +557,7 @@ end)
 function sectiontable:Button(Info)
 Info.Text = Info.Text or "Button"
 Info.Callback = Info.Callback or function() end
+Info.Tooltip = Info.Tooltip or ""
 
 local buttontable = {}
     
@@ -491,6 +567,10 @@ button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 button.BackgroundTransparency = 1
 button.Size = UDim2.new(0, 162, 0, 27)
 button.Parent = sectionFrame
+
+if Info.Tooltip ~= "" then
+    AddTooltip(button, Info.Tooltip)
+end
 
 local buttonText = Instance.new("TextLabel")
 buttonText.Name = "ButtonText"
@@ -525,6 +605,7 @@ function sectiontable:Toggle(Info)
 Info.Text = Info.Text or "Toggle"
 Info.Flag = Info.Flag or Info.Text
 Info.Callback = Info.Callback or function() end
+Info.Tooltip = Info.Tooltip or ""
 
 library.Flags[Info.Flag] = false
 
@@ -536,6 +617,10 @@ toggle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 toggle.BackgroundTransparency = 1
 toggle.Size = UDim2.new(0, 162, 0, 27)
 toggle.Parent = sectionFrame
+
+if Info.Tooltip ~= "" then
+    AddTooltip(toggle, Info.Tooltip)
+end
 
 local toggleText = Instance.new("TextLabel")
 toggleText.Name = "ToggleText"
