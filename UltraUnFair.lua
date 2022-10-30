@@ -17,6 +17,7 @@ for _, v in pairs(Info.Abilities) do
     table.insert(Abilities, _)
 end
 
+
 local Claim = ReplicatedStorage:WaitForChild("ClaimAbility")
 local Reroll = ReplicatedStorage:WaitForChild("Reroll")
 
@@ -148,6 +149,12 @@ local function PowerUp()
     if Player.Character and not Player.Character:FindFirstChild("ActiveAbility") then
         ReplicatedStorage.ToggleAbility:InvokeServer(true)
     end
+end
+
+local function GetStored()
+    local Stored = DecodeStats().Stored
+    
+    return Stored
 end
 --//
 
@@ -627,8 +634,17 @@ local RollCheck
 local AutoRoll = false
 local Ignore = false
 local MinimumLevel = 10
+local SelectedSlot
 local Slot = 1
 local Chosen
+
+local function UpdateSlot(slot)
+    local AbilitySlot = GetStored()[slot]
+    
+    SelectedSlot:Set({
+        Text = "Slot: "..AbilitySlot.Ability.." ("..tostring(AbilitySlot.Potential)..")"
+    })
+end
 
 local function OnChosen(v, p)
     Library:Notify({
@@ -638,9 +654,34 @@ local function OnChosen(v, p)
     Got = true
             
     RollCheck:Set(false)
+    
+    task.spawn(function()
+        task.wait(1)
+        
+        UpdateSlot(Slot)
+    end)
+end
+
+local RerollScript = game.Players.LocalPlayer.PlayerGui.Reroll.Reroll
+
+local ClaimFunc
+
+for _, v in pairs(getgc()) do
+    if typeof(v) == "function" and getfenv(v).script == RerollScript then
+        local constants = debug.getconstants(v)
+        
+        if tostring(constants[2]) == "ClearAllChildren" then
+            ClaimFunc = v
+            break
+        end
+    end
 end
 
 Claim.OnClientInvoke = function(v, p) -- egg salad had this idea first.
+    setupvalue(ClaimFunc, 1, false)
+    setupvalue(ClaimFunc, 2, false)
+    setupvalue(ClaimFunc, 8, false)
+    
     if table.find(Chosen, "All (Minimum Level)") then
         if p >= MinimumLevel then
         OnChosen(v, p)
@@ -667,6 +708,8 @@ Claim.OnClientInvoke = function(v, p) -- egg salad had this idea first.
         Text = "You have spun a "..p.." "..v,
         Timeout = 5
     })
+
+    p = 1
     
     return false, false
 end
@@ -698,7 +741,7 @@ RollCheck = Section5:Check({
         while AutoRoll and not Got do
             warn("working")
             Reroll:InvokeServer()
-            task.wait(2)
+            task.wait(.5)
         end
         
     end
@@ -739,7 +782,15 @@ Section5:Slider({
     Maximum = Player.MaxStored.Value,
     Callback = function(v)
         Slot = v
+        
+        UpdateSlot(v)
     end
 })
+
+SelectedSlot = Section5:Label({
+    Text = "Slot: "
+})
+
+UpdateSlot(1)
 
 Tab:Select()
