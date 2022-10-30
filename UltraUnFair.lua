@@ -654,12 +654,6 @@ local function OnChosen(v, p)
     Got = true
             
     RollCheck:Set(false)
-    
-    task.spawn(function()
-        task.wait(1)
-        
-        UpdateSlot(Slot)
-    end)
 end
 
 local RerollScript = game.Players.LocalPlayer.PlayerGui.Reroll.Reroll
@@ -790,6 +784,13 @@ Section5:Slider({
 SelectedSlot = Section5:Label({
     Text = "Slot: "
 })
+
+task.spawn(function()
+    while true do
+        UpdateSlot(Slot)
+        task.wait(1)
+    end
+end)
 
 UpdateSlot(1)
 
