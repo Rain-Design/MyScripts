@@ -7,6 +7,19 @@ local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
+local Info = require(ReplicatedStorage:WaitForChild("Info"))
+
+local Abilities = {"All (Minimum Level)"}
+
+for _, v in pairs(Info.Abilities) do
+    if v.Unobtainable == true then continue end
+    
+    table.insert(Abilities, _)
+end
+
+local Claim = ReplicatedStorage:WaitForChild("ClaimAbility")
+local Reroll = ReplicatedStorage:WaitForChild("Reroll")
+
 local KingValue = ReplicatedStorage:WaitForChild("KingValue")
 local BossValue = ReplicatedStorage:WaitForChild("Boss")
 
@@ -295,6 +308,11 @@ local Section4 = Tab:Section({
     Side = "Right"
 })
 
+local Section5 = Tab2:Section({
+    Text = "Auto-Roll",
+    Side = "Right"
+})
+
 local MobAura = false
 local Bosses = false
 
@@ -416,7 +434,7 @@ Section:Dropdown({
 
 MobAuraCheck = Section:Check({
     Text = "Kill-Aura",
-    Tooltip = "Use energy blade for more efficiency.",
+    Tooltip = "Use energy blades for more efficiency.",
     Keybind = Enum.KeyCode.Z,
     Callback = function(bool)
         MobAura = bool
@@ -601,6 +619,127 @@ Section3:Check({
 
 AntiState = Section4:Label({
     Text = "Anti-TP: Not bypassed"
+})
+
+local Got = false
+local RollCheck
+
+local AutoRoll = false
+local Ignore = false
+local MinimumLevel = 10
+local Slot = 1
+local Chosen
+
+local function OnChosen(v, p)
+    Library:Notify({
+            Text = "Congratulations! You have spun a "..p.." "..v
+        })
+        
+    Got = true
+            
+    RollCheck:Set(false)
+end
+
+Claim.OnClientInvoke = function(v, p) -- egg salad had this idea first.
+    if table.find(Chosen, "All (Minimum Level)") then
+        if p >= MinimumLevel then
+        OnChosen(v, p)
+        
+        return false, Slot
+        end
+    end
+    
+    if Ignore then
+        if table.find(Chosen, v) then
+            OnChosen(v, p)
+            
+            return false, Slot
+        end
+    end
+    
+    if table.find(Chosen, v) and p >= MinimumLevel then
+        OnChosen(v, p)
+        
+        return false, Slot
+    end
+    
+    Library:Notify({
+        Text = "You have spun a "..p.." "..v,
+        Timeout = 5
+    })
+    
+    return false, false
+end
+
+RollCheck = Section5:Check({
+    Text = "Enabled",
+    Callback = function(v)
+        AutoRoll = v
+        
+        if not AutoRoll then
+            Got = false
+        end
+        
+        if Chosen == nil and AutoRoll then
+            Library:Notify({
+                Text = "You have to choose one or more abilities.",
+                Timeout = 10
+            })
+        
+            while true do
+                if Chosen ~= nil or not AutoRoll then
+                    break
+                end
+                task.wait()
+            end
+            
+        end
+        
+        while AutoRoll and not Got do
+            warn("working")
+            Reroll:InvokeServer()
+            task.wait(2)
+        end
+        
+    end
+})
+
+Section5:Check({
+    Text = "Ignore Level",
+    Callback = function(v)
+        Ignore = v
+    end
+})
+
+Section5:Dropdown({
+    Text = "Abilities",
+    List = Abilities,
+    MultiSelect = true,
+    Callback = function(v)
+        Chosen = v
+    end
+})
+
+Section5:Slider({
+    Text = "Minimum Level",
+    Minimum = 1,
+    Default = 10,
+    Maximum = 20,
+    Incrementation = 0.1,
+    Callback = function(v)
+        MinimumLevel = v
+    end
+})
+
+Section5:Slider({
+    Text = "Slot",
+    Minimum = 1,
+    Default = 1,
+    Incrementation = 1,
+    Maximum = Player.MaxStored.Value,
+    Callback = function(v)
+        Slot = v
+    end
 })
 
 Tab:Select()
