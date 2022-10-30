@@ -639,6 +639,8 @@ local Slot = 1
 local Chosen
 
 local function UpdateSlot(slot)
+    if SelectedSlot == nil then return end
+    
     local AbilitySlot = GetStored()[slot]
     
     SelectedSlot:Set({
