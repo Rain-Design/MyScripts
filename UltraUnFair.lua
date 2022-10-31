@@ -688,12 +688,7 @@ RollCheck = Section5:Check({
                 Timeout = 10
             })
         
-            while true do
-                if Chosen ~= nil or not AutoRoll then
-                    break
-                end
-                task.wait()
-            end
+            RollCheck:Set(false)
             
         end
         
@@ -782,11 +777,22 @@ local function MassUpgrade(item, level)
     game:GetService("ReplicatedStorage").UpgradeItem:InvokeServer(item, Upgrade)
 end
 
-Section7:Check({
+ItemRollCheck = Section7:Check({
     Text = "Enabled",
     Tooltip = "Spins for the desired item and uses the items below the minimum level to upgrade the item",
     Callback = function(v)
         AutoItemRoll = v
+        
+        if RollItem == nil and AutoItemRoll then
+            Library:Notify({
+                Text = "You have to choose an item before enabling this.",
+                Timeout = 10
+            })
+            
+            ItemRollCheck:Set(false)
+            
+            return
+        end
         
         local Quantity
         
