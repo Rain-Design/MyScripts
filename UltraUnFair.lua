@@ -5,6 +5,7 @@ local Player = Players.LocalPlayer
 
 local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local Info = require(ReplicatedStorage:WaitForChild("Info"))
@@ -180,7 +181,7 @@ local Quests = {
         Name = "Gaming Disorder"
     },
     ["High-Tier"] = {
-        Targets = {"Remi", "Blyke", "Isen"},
+        Targets = {"Remi", "Blyke", "Isen", "Zeke"},
         Name = "Kingdom"
     },
     ["God-Tier"] = {
@@ -306,10 +307,6 @@ local Section2 = Tab:Section({
     Side = "Right"
 })
 
-local Section3 = Tab2:Section({
-    Text = "Items"
-})
-
 local Section4 = Tab:Section({
     Text = "State",
     Side = "Right"
@@ -318,6 +315,16 @@ local Section4 = Tab:Section({
 local Section5 = Tab2:Section({
     Text = "Auto-Roll",
     Side = "Right"
+})
+
+local Section6 = Tab2:Section({
+    Text = "Crafting",
+    Side = "Left"
+})
+
+local Section7 = Tab2:Section({
+    Text = "Item-Roll",
+    Side = "Left"
 })
 
 local MobAura = false
@@ -560,52 +567,8 @@ Section2:Button({
     end
 })
 
-local Item
-local Level = 2
-
-Section3:Dropdown({
-    Text = "Item",
-    List = {"Fist", "Relic"},
-    Callback = function(v)
-        Item = v
-    end
-})
-
-Section3:Slider({
-    Text = "Minimum Level",
-    Minimum = 2,
-    Default = 6,
-    Maximum = 10,
-    Incrementation = .1,
-    Callback = function(v)
-        Level = v
-    end
-})
-
-Section3:Button({
-    Text = "Mass Upgrade",
-    Tooltip = "Uses all the items lesser or equal to the minimum level to upgrade your eqquiped item.",
-    Callback = function()
-        if not Item then
-            return
-        end
-        
-        local Upgrade = {}
-
-        local ItemTable = DecodeStats()[Item.."s"]
-        
-        for _, v in ipairs(ItemTable) do
-            if v.Level <= Level then
-                table.insert(Upgrade, _)
-            end
-        end
-        
-        game:GetService("ReplicatedStorage").UpgradeItem:InvokeServer(Item, Upgrade)
-    end
-})
-
 local Craft = false
-Section3:Check({
+Section6:Check({
     Text = "Ticket Crafting",
     Callback = function(v)
         Craft = v
@@ -795,5 +758,112 @@ task.spawn(function()
 end)
 
 UpdateSlot(1)
+
+local AutoItemRoll = false
+local RollItem
+local RollItemLevel = 6
+local Blacklisted
+local BlacklistedLevel
+local ItemRollCheck
+
+local function MassUpgrade(item, level)
+    local Upgrade = {}
+
+    local ItemTable = DecodeStats()[item.."s"]
+        
+    for _, v in ipairs(ItemTable) do
+        if v.Level <= level then
+            if Blacklisted ~= nil and table.find(Blacklisted, v.Name) and v.Level >= BlacklistedLevel then continue end
+            
+            table.insert(Upgrade, _)
+        end
+    end
+        
+    game:GetService("ReplicatedStorage").UpgradeItem:InvokeServer(item, Upgrade)
+end
+
+Section7:Check({
+    Text = "Enabled",
+    Tooltip = "Spins for the desired item and uses the items below the minimum level to upgrade the item",
+    Callback = function(v)
+        AutoItemRoll = v
+        
+        local Quantity
+        
+        while AutoItemRoll do
+            Quantity = #DecodeStats()[RollItem.."s"]
+            
+            if Quantity >= 25 then
+                while true do
+                    if Quantity < 25 then
+                        break
+                    end
+                    
+                    MassUpgrade(RollItem, RollItemLevel)
+                    
+                    task.wait(.25)
+                    
+                    Quantity = #DecodeStats()[RollItem.."s"]
+                    
+                    task.wait(.75)
+                end
+            end
+            
+            game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
+            if Quantity < 24 then
+                game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
+            end
+            
+            task.wait(.1)
+        end
+    end
+})
+
+Section7:Dropdown({
+    Text = "Item",
+    List = {"Fist", "Relic"},
+    Callback = function(v)
+        RollItem = v
+    end
+})
+
+Section7:Slider({
+    Text = "Minimum Level",
+    Minimum = 2,
+    Default = 6,
+    Incrementation = 0.1,
+    Maximum = 10,
+    Callback = function(v)
+        RollItemLevel = v
+    end
+})
+
+local FistsTable = {}
+
+for _, v in pairs(Info.Fists) do
+    table.insert(FistsTable, _)
+end
+
+Section7:Dropdown({
+    Text = "Fist Blacklist",
+    Tooltip = "Fists you don't want to be used to upgrade the item.",
+    MultiSelect = true,
+    List = FistsTable,
+    Callback = function(v)
+        Blacklisted = v
+    end
+})
+
+Section7:Slider({
+    Text = "Blacklisted Level",
+    Tooltip = "The minimum level of the blacklisted fist you want to keep.",
+    Minimum = 2,
+    Default = 6,
+    Maximum = 10,
+    Incrementation = 0.1,
+    Callback = function(v)
+        BlacklistedLevel = v
+    end
+})
 
 Tab:Select()
