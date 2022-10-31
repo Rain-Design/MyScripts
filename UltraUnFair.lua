@@ -801,7 +801,7 @@ ItemRollCheck = Section7:Check({
             
             if Quantity >= 25 then
                 while true do
-                    if Quantity < 25 then
+                    if Quantity < 25 or not AutoItemRoll then
                         break
                     end
                     
@@ -818,6 +818,7 @@ ItemRollCheck = Section7:Check({
             game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
             if Quantity < 24 then
                 for i = 1, 4 do
+                    if not AutoItemRoll then break end
                     game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
                 end
             end
