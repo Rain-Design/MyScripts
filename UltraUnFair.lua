@@ -817,7 +817,9 @@ ItemRollCheck = Section7:Check({
             
             game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
             if Quantity < 24 then
-                game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
+                for i = 1, 4 do
+                    game:GetService("ReplicatedStorage").RollGear:InvokeServer(RollItem)
+                end
             end
             
             task.wait(.1)
