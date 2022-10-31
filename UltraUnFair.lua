@@ -745,6 +745,9 @@ SelectedSlot = Section5:Label({
     Text = "Slot: "
 })
 
+Section5:Label({
+    Text = "OBS: Don't spin manually atm!"
+})
 task.spawn(function()
     while true do
         UpdateSlot(Slot)
