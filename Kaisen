@@ -4,6 +4,7 @@ local players = game:GetService("Players")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local marketplaceService = game:GetService("MarketplaceService")
 local runService = game:GetService("RunService")
+local virtualUser = game:GetService('VirtualUser')
 
 local player = players.LocalPlayer
 local playerGui = player.PlayerGui
@@ -26,6 +27,11 @@ old = hookmetamethod(game, "__namecall", function(self, ...)
     end
     
     return old(self, ...)
+end)
+
+player.Idled:Connect(function()
+    virtualUser:CaptureController()
+    virtualUser:ClickButton2(Vector2.new())
 end)
 
 local questTable, chosenQuest = {
