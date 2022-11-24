@@ -523,7 +523,7 @@ shopSection:Button({
 
         player.Character.HumanoidRootPart.CFrame = interactions.Styles[styleArg].CFrame
         task.wait(.5)
-        game:GetService("ReplicatedStorage").Knit.Services.interactService.RF.GetOptionData:InvokeServer(styleArg, "Buy with Yen")
+        game:GetService("ReplicatedStorage").Knit.Services.interactService.RF.GetOptionData:InvokeServer(styleArg, "Yes")
         task.wait(.25)
         player.Character.HumanoidRootPart.CFrame = before
     end
