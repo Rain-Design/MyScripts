@@ -119,6 +119,27 @@ local questTable, chosenQuest = {
         NPC = interactionModels.SwampPrimarySideQuest,
         Mobs = {"Eye Fanatic"},
         Level = {220, 999}
+    },
+    ["Saku"] = {
+        Sidequest = "Miwa",
+        QuestArg = "Saku",
+        NPC = interactionModels.Miwa,
+        Mobs = {"Saku"},
+        Boss = true
+    },
+    ["Hanamato"] = {
+        Sidequest = "Yuzi2",
+        QuestArg = "Hanamato",
+        NPC = interactionModels.Yuzi2,
+        Mobs = {"Hanamato"},
+        Boss = true
+    },
+    ["Joko"] = {
+        Sidequest = "Pygmy",
+        QuestArg = "Joko",
+        NPC = interactionModels.Pygmy,
+        Mobs = {"Joko"},
+        Boss = true
     }
 }
 
@@ -204,7 +225,7 @@ local questDropdown
 local function setQuestByLevel()
     local playerLevel = getData().Level
     for quest, v in pairs(questTable) do
-        if playerLevel >= v.Level[1] and playerLevel < v.Level[2] then
+        if not v.Boss and playerLevel >= v.Level[1] and playerLevel < v.Level[2] then
             questDropdown:Select(quest)
             break
         end
@@ -375,7 +396,7 @@ farmSection:Check({
 
 farmSection:Dropdown({
     Text = "Mode",
-    Default = "Above",
+    Default = "Under",
     List = {"Above", "Under"},
     Callback = function(v)
         mode = v
