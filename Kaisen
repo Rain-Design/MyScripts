@@ -320,7 +320,7 @@ local statsSection = farmTab:Section({
     Side = "Right"
 })
 
-local autoFarm, questByLevel, killingLabel = false, false
+local autoFarm, questByLevel, mode, killingLabel = false, false
 farmSection:Check({
     Text = "Enabled",
     Callback = function(v)
@@ -346,7 +346,7 @@ farmSection:Check({
                         end
                         killingLabel:Set(string.format("Killing: %s (%d/%d)", nearestMob.Name, math.floor(nearestMob.Humanoid.Health), math.floor(nearestMob.Humanoid.MaxHealth)))
                         nearestMob.HumanoidRootPart.Size = Vector3.new(10, 20, 10)
-                        player.Character.HumanoidRootPart.CFrame =  nearestMob.HumanoidRootPart.CFrame * CFrame.new(0, 6, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                        player.Character.HumanoidRootPart.CFrame =  nearestMob.HumanoidRootPart.CFrame * CFrame.new(0, mode == "Above" and 6 or -8, 0) * CFrame.Angles(math.rad(mode == "Above" and -90 or 90), 0, 0)
                         attack:FireServer(false)
                         getModules()
                         task.wait()
@@ -370,6 +370,15 @@ farmSection:Check({
                 setQuestByLevel()
             end
         end
+    end
+})
+
+farmSection:Dropdown({
+    Text = "Mode",
+    Default = "Above",
+    List = {"Above", "Under"},
+    Callback = function(v)
+        mode = v
     end
 })
 
