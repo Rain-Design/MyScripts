@@ -1,0 +1,41 @@
+getgenv().Settings = {
+    Enabled = true,
+    Wanted = {
+        "Gravity";
+        "Quake";
+    }
+}
+
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local teleportService = game:GetService("TeleportService")
+local players = game:GetService("Players")
+
+local replicator = replicatedStorage:WaitForChild("Replicator")
+local player = players.LocalPlayer
+local mainData = player:WaitForChild("MAIN_DATA")
+local gems = mainData:WaitForChild("Gems")
+
+replicator:InvokeServer("Core", "UpdateSettings", {["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true})
+
+while Settings.Enabled do
+    if gems.Value < 80 then
+        teleportService:Teleport(game.PlaceId, player)
+        rconsolewarn("Teleported.")
+        break
+    end
+    
+    local fruit = replicator:InvokeServer("FruitsHandler", "Spin", {Type = "Fast"})
+    
+    if table.find(Settings.Wanted, fruit) then
+        rconsolewarn(string.format("Congrats! you got: %s", fruit))
+        break
+    end
+    
+    rconsolewarn(string.format("You got: %s", fruit))
+    
+    task.wait(.2)
+end
