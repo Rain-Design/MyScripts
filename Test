@@ -23,6 +23,7 @@ replicator:InvokeServer("Core", "UpdateSettings", {["\255"] = true, ["\255"] = t
 
 while Settings.Enabled do
     if gems.Value < 80 then
+        syn.queue_on_teleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/MyScripts/main/Test", true))()]])
         teleportService:Teleport(game.PlaceId, player)
         rconsolewarn("Teleported.")
         break
