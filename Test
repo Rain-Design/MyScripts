@@ -37,6 +37,7 @@ while Settings.Enabled do
     
     if table.find(Settings.Wanted, fruit) then
         rconsolewarn(string.format("Congrats! you got: %s", fruit))
+        replicator:InvokeServer("Core", "UpdateSettings", {Textures = true, FPSCounter = true, KillFeed = true, Music = true, Shadows = true})
         break
     end
     
