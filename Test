@@ -31,6 +31,10 @@ while Settings.Enabled do
     
     local fruit = replicator:InvokeServer("FruitsHandler", "Spin", {Type = "Fast"})
     
+    if fruit == nil then
+        continue
+    end
+    
     if table.find(Settings.Wanted, fruit) then
         rconsolewarn(string.format("Congrats! you got: %s", fruit))
         break
