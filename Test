@@ -1,3 +1,10 @@
+getgenv().Settings = {
+    Slot = 1,
+    Wanted = {
+        "Quake";
+    }
+}
+
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
@@ -12,7 +19,11 @@ local player = players.LocalPlayer
 local mainData = player:WaitForChild("MAIN_DATA")
 local gems = mainData:WaitForChild("Gems")
 
-local Settings = httpService:JSONDecode(readfile("fruitFolder/Settings.json"))
+if not isfolder("fruitFolder") then
+    makefolder("fruitFolder")
+end
+
+writefile("fruitFolder/Settings.json", httpService:JSONEncode(Settings))
 
 replicator:InvokeServer("FruitsHandler", "SwitchSlot", {Slot = Settings.Slot})
 task.wait(.15)
@@ -22,6 +33,10 @@ while true do
     if gems.Value < 80 then
         syn.queue_on_teleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/MyScripts/main/Test", true))()]])
         teleportService:Teleport(game.PlaceId, player)
+        teleportService.TeleportInitFailed:Connect(function()
+            rconsolewarn(string.format("Error while trying to teleport. Retrying."))
+            teleportService:Teleport(game.PlaceId, player)
+        end)
         rconsolewarn("Teleported.")
         break
     end
