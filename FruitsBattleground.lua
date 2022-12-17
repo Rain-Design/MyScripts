@@ -16,10 +16,10 @@ local Settings = httpService:JSONDecode(readfile("fruitFolder/Settings.json"))
 
 replicator:InvokeServer("FruitsHandler", "SwitchSlot", {Slot = Settings.Slot})
 task.wait(.15)
-replicator:InvokeServer("Core", "UpdateSettings", {["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true})
 
 while true do
     if gems.Value < 80 then
+        replicator:InvokeServer("Core", "UpdateSettings", {["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true})
         syn.queue_on_teleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/MyScripts/main/FruitsBattleground.lua", true))()]])
         teleportService:Teleport(game.PlaceId, player)
         teleportService.TeleportInitFailed:Connect(function()
