@@ -23,10 +23,10 @@ while true do
         syn.queue_on_teleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/MyScripts/main/FruitsBattleground.lua", true))()]])
         teleportService:Teleport(game.PlaceId, player)
         teleportService.TeleportInitFailed:Connect(function()
-            rconsolewarn(string.format("Error while trying to teleport. Retrying."))
+            rconsolewarn(string.format("Teleport Failed. Retrying."))
             teleportService:Teleport(game.PlaceId, player)
         end)
-        rconsolewarn("Teleported.")
+        rconsolewarn("Out of gems. Rolling data back.")
         break
     end
     
@@ -38,11 +38,11 @@ while true do
     end
     
     if table.find(Settings.Wanted, fruit) then
-        rconsolewarn(string.format("%s - Congrats! you got: %s", currentTime, fruit))
+        rconsolewarn(string.format("%s - Congrats! you got: [%s]", currentTime, fruit))
         break
     end
     
-    rconsolewarn(string.format("%s - You got: %s", currentTime, fruit))
+    rconsolewarn(string.format("%s - You got: [%s]", currentTime, fruit))
     
     task.wait(.2)
 end
