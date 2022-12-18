@@ -15,18 +15,18 @@ local gems = mainData:WaitForChild("Gems")
 local Settings = httpService:JSONDecode(readfile("fruitFolder/Settings.json"))
 
 replicator:InvokeServer("FruitsHandler", "SwitchSlot", {Slot = Settings.Slot})
-task.wait(.15)
 
 while true do
     if gems.Value < 80 then
+        local currentTime = os.date("%X")
         replicator:InvokeServer("Core", "UpdateSettings", {["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true, ["\255"] = true})
         syn.queue_on_teleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Rain-Design/MyScripts/main/FruitsBattleground.lua", true))()]])
         teleportService:Teleport(game.PlaceId, player)
         teleportService.TeleportInitFailed:Connect(function()
-            rconsolewarn(string.format("Teleport Failed. Retrying."))
+            rconsolewarn(string.format("%s - Teleport Failed. Retrying.", currentTime))
             teleportService:Teleport(game.PlaceId, player)
         end)
-        rconsolewarn("Out of gems. Rolling data back.")
+        rconsolewarn(string.format("%s - Out of gems. Rolling data back.", currentTime))
         break
     end
     
